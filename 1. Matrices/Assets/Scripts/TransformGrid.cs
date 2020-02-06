@@ -7,11 +7,13 @@ public class TransformGrid : MonoBehaviour
 {
     public Transform prefab;
     public int gridRes = 10;
-    Transform[] grid;
+    private Transform[] _grid;
+
+    private List<Transformation> _transformations;
 
     private void Awake()
     {
-        grid = new Transform[gridRes * gridRes * gridRes];
+        _grid = new Transform[gridRes * gridRes * gridRes];
 
         for (int i = 0, z = 0; z < gridRes; z++)
         {
@@ -19,7 +21,21 @@ public class TransformGrid : MonoBehaviour
             {
                 for (int x = 0; x < gridRes; x++)
                 {
-                    grid[i] = CreateGridPoint(x, y, z);
+                    _grid[i] = CreateGridPoint(x, y, z);
+                }
+            }
+        }
+
+        _transformations = new List<Transformation>();
+    }
+
+    private void Update()
+    {
+        GetComponents<Transformation>(_transformations);
+        for (int i = 0, z = 0; z < gridRes; z++) {
+            for (int y = 0; y < gridRes; y++) {
+                for (int x = 0; x < gridRes; x++, i++) {
+                    _grid[i].localPosition = TransformPoint(x, y, z);
                 }
             }
         }
@@ -34,7 +50,7 @@ public class TransformGrid : MonoBehaviour
             (float) x / gridRes,
             (float) y / gridRes,
             (float) z / gridRes
-            );
+        );
         return point;
     }
 
@@ -44,6 +60,18 @@ public class TransformGrid : MonoBehaviour
             x - (gridRes - 1) * 0.5f,
             y - (gridRes - 1) * 0.5f,
             z - (gridRes - 1) * 0.5f
-            );
+        );
+    }
+
+    Vector3 TransformPoint(int x, int y, int z)
+    {
+        Vector3 coordinates = GetCoordinates(x, y, z);
+        
+        for (int i = 0; i < _transformations.Count; i++)
+        {
+            coordinates = _transformations[i].Apply(coordinates);
+        }
+
+        return coordinates;
     }
 }

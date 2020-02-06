@@ -56,7 +56,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\PosTransformation.cs" />
      <Compile Include="Assets\Scripts\TransformGrid.cs" />
+     <Compile Include="Assets\Scripts\Transformation.cs" />
  <Reference Include="Unity.XR.Management">
  <HintPath>C:/Users/User/Desktop/Advanced-Unity-Materials/1. Matrices/Library/ScriptAssemblies/Unity.XR.Management.dll</HintPath>
  </Reference>
